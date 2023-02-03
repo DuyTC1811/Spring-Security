@@ -1,9 +1,10 @@
-package com.example.springsecurity.services;
+package com.example.springsecurity.services.queries;
 
 import com.example.springsecurity.configuration.jwt.JwtUtils;
 import com.example.springsecurity.configuration.security.UserDetailsImpl;
 import com.example.springsecurity.dto.requests.LoginRequest;
 import com.example.springsecurity.dto.response.LoginResponse;
+import io.cqrs.services.query.IBaseQueryService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class LoginQuerySV {
+public class LoginQuerySV implements IBaseQueryService<LoginResponse, LoginRequest> {
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
 
@@ -24,7 +25,8 @@ public class LoginQuerySV {
         this.authenticationManager = authenticationManager;
     }
 
-    public LoginResponse loginUser(LoginRequest loginRequest) {
+    @Override
+    public LoginResponse handler(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);

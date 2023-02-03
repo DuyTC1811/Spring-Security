@@ -2,7 +2,7 @@ package com.example.springsecurity.controllers.queries;
 
 import com.example.springsecurity.dto.requests.LoginRequest;
 import com.example.springsecurity.dto.response.LoginResponse;
-import com.example.springsecurity.services.LoginQuerySV;
+import com.example.springsecurity.services.queries.LoginQuerySV;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class LoginQueryCtrl {
 
     @GetMapping("sign-in")
     public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
-        LoginResponse loginResponse = loginQuery.loginUser(loginRequest);
+        LoginResponse loginResponse = loginQuery.handler(loginRequest);
         return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
 }

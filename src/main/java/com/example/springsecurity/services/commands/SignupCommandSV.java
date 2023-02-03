@@ -1,4 +1,4 @@
-package com.example.springsecurity.services;
+package com.example.springsecurity.services.commands;
 
 import com.example.springsecurity.dto.requests.SignupRequest;
 import com.example.springsecurity.dto.response.SignupResponse;
@@ -7,6 +7,7 @@ import com.example.springsecurity.entitys.Role;
 import com.example.springsecurity.entitys.User;
 import com.example.springsecurity.repositorys.IRoleRepository;
 import com.example.springsecurity.repositorys.IUserRepository;
+import io.cqrs.services.command.IBaseCommandService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class SignupCommandSV {
+public class SignupCommandSV implements IBaseCommandService<SignupResponse, SignupRequest> {
     private final PasswordEncoder encoder;
     private final IUserRepository userRepository;
     private final IRoleRepository roleRepository;
@@ -28,17 +29,18 @@ public class SignupCommandSV {
     /**
      * register User
      */
-    public SignupResponse registerUser(SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+    @Override
+    public SignupResponse handler(SignupRequest signupRequest) {
+        if (userRepository.existsByUsername(signupRequest.getUsername())) {
             return new SignupResponse("Error: Username is already taken!");
         }
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userRepository.existsByEmail(signupRequest.getEmail())) {
             return new SignupResponse("Error: Email is already in use!");
         }
-        /** Create new user's account */
-        User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
+        // Create new user's account
+        User user = new User(signupRequest.getUsername(), signupRequest.getEmail(), encoder.encode(signupRequest.getPassword()));
 
-        Set<String> strRoles = signUpRequest.getRole();
+        Set<String> strRoles = signupRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {

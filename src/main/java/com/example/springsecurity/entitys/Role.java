@@ -8,10 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "roles")
 public class Role {
-    @Id
-//    @Type(type="uuid-char")
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "roles_uuid", length = 36)
+    @Id @Column(name = "roles_uuid", length = 36)
     private String uuid;
 
     @Enumerated(EnumType.STRING)

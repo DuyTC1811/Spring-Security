@@ -32,7 +32,7 @@ public class JwtUtils {
         Date currentDate = new Date();
 
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-        /** Thêm những thông tin vào trong token **/
+        // Thêm những thông tin vào trong token
         Map<String, Object> claims = new HashMap<>();
         claims.put("pass", userPrincipal.getPassword());
         claims.put("email", userPrincipal.getEmail());

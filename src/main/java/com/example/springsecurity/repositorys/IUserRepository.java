@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IUserRepository extends JpaRepository<User, String> {
-    @Query("SELECT u FROM User u WHERE u.username = :username")
+    @Query("SELECT u FROM User u JOIN FETCH u.roles WHERE u.username = :username")
     User findByUsername(String username);
 
     Boolean existsByUsername(String username);

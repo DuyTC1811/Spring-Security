@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class SignupCommandSV implements IBaseCommandService<SignupResponse, SignupRequest> {
@@ -38,7 +39,12 @@ public class SignupCommandSV implements IBaseCommandService<SignupResponse, Sign
             return new SignupResponse("Error: Email is already in use!");
         }
         // Create new user's account
-        User user = new User(signupRequest.getUsername(), signupRequest.getEmail(), encoder.encode(signupRequest.getPassword()));
+        User user = User.builder()
+                .uuid(UUID.randomUUID().toString())
+                .username(signupRequest.getUsername())
+                .email(signupRequest.getEmail())
+                .password(encoder.encode(signupRequest.getPassword()))
+                .build();
 
         Set<String> strRoles = signupRequest.getRole();
         Set<Role> roles = new HashSet<>();

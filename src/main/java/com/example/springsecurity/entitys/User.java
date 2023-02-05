@@ -1,5 +1,7 @@
 package com.example.springsecurity.entitys;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,20 +11,23 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 @Entity
+@Builder
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
 })
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
-    @Id @Column(name = "user_uuid", length = 36)
-    private String uuid = UUID.randomUUID().toString();
+    @Id
+    @Column(name = "user_uuid", length = 36)
+    private String uuid;
 
-    @NotBlank @Size(max = 20)
+    @NotBlank
+    @Size(max = 20)
     private String username;
 
     @NotBlank
@@ -30,7 +35,8 @@ public class User {
     @Size(max = 50)
     private String email;
 
-    @NotBlank @Size(max = 120)
+    @NotBlank
+    @Size(max = 120)
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -39,9 +45,4 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_uuid"))
     private Set<Role> roles = new HashSet<>();
 
-    public User(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
 }

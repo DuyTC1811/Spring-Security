@@ -1,4 +1,4 @@
-package com.example.springsecurity.repositorys;
+package com.example.springsecurity.mappers;
 
 import com.example.springsecurity.entitys.ERole;
 import com.example.springsecurity.entitys.Role;

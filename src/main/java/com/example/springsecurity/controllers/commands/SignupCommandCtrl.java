@@ -2,9 +2,8 @@ package com.example.springsecurity.controllers.commands;
 
 import com.example.springsecurity.dto.requests.SignupRequest;
 import com.example.springsecurity.dto.response.SignupResponse;
-import com.example.springsecurity.services.commands.SignupCommandSV;
+import io.cqrs.controller.CommandController;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,16 +15,11 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "API auth", description = "Auth management")
-public class SignupCommandCtrl {
-    private final SignupCommandSV signupCommand;
-
-    public SignupCommandCtrl(SignupCommandSV signupCommand) {
-        this.signupCommand = signupCommand;
-    }
-
+public class SignupCommandCtrl extends CommandController<SignupResponse, SignupRequest> {
+    @Override
     @PostMapping("/sing-up")
-    public ResponseEntity<SignupResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        SignupResponse signupResponse = signupCommand.handler(signUpRequest);
-        return new ResponseEntity<>(signupResponse, HttpStatus.OK);
+    protected ResponseEntity<SignupResponse> coordinator(@Valid @RequestBody SignupRequest signupRequest) {
+        return execute(signupRequest);
     }
+
 }

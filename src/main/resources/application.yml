@@ -1,36 +1,22 @@
 server:
   port: 8080
 
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.example.springsecurity.dto.*   # Quét thư mục
+  mapper-locations: /mybatis/*.xml
+
 spring:
   jpa:
     show-sql: true
-    properties:
-      hibernate:
-        show_sql: true
-        provider_disables_autocommit: false
-        connection.handling_mode: DELAYED_ACQUISITION_AND_RELEASE_AFTER_TRANSACTION
     hibernate:
       ddl-auto: update
     open-in-view: false
 
-  # ENABLE ERRORS IN DESERIALIZATION OF MISSING OR IGNORED PROPERTIES
-  jackson:
-    deserialization:
-      fail-on-unknown-properties: true
-      fail-on-ignored-properties: true
-  # ENABLE ERRORS ON REQUESTS FOR NON-EXISTENT RESOURCES
-  mvc:
-    throw-exception-if-no-handler-found: true
-  # DISABLE MAPPINGS OF STATIC RESOURCES (IS NOT USABLE IN DEVELOPMENT OF APIs)
-  web:
-    resources:
-      add-mappings: false
-
   security:
     jwtSecret: DUY-TC
     jwtExpirationMs: 86400000
-
-master:
   datasource:
     hikari:
       auto-commit: true
@@ -49,41 +35,13 @@ master:
         cacheServerConfiguration: true
         elideSetAutoCommits: true
         maintainTimeStats: false
-      pool-name: ConnectPoll
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: duytc
-
-slave:
-  datasource:
-    hikari:
-      auto-commit: true
-      idle-timeout: 20000
-      maximum-pool-size: 2
-      max-lifetime: 1800000
-      connection-timeout: 20000
-      data-source-properties:
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
-        useLocalSessionState: true
-        rewriteBatchedStatements: true
-        cacheResultSetMetadata: true
-        cacheServerConfiguration: true
-        elideSetAutoCommits: true
-        maintainTimeStats: false
-      pool-name: ConnectPoll
+      pool-name: Slave-DB
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: duytc
 
 logging:
   level:
-    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
-    org.springframework.data.mongodb.repository.Query: DEBUG
-    org.springframework.data.mongodb: DEBUG
+    com.example.springmybatis.mapper: TRACE
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
-#    com.zaxxer.hikari.HikariConfig: DEBUG
-#    com.zaxxer.hikari: TRACE

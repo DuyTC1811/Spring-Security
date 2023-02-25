@@ -1,7 +1,7 @@
 package com.example.springsecurity.configuration.security;
 
 import com.example.springsecurity.entitys.User;
-import com.example.springsecurity.repositorys.IUserRepository;
+import com.example.springsecurity.mappers.IUserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

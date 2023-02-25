@@ -1,22 +1,24 @@
-package com.example.springsecurity.services.commands;
+package com.example.springsecurity.handlers.commands;
 
 import com.example.springsecurity.dto.requests.SignupRequest;
 import com.example.springsecurity.dto.response.SignupResponse;
 import com.example.springsecurity.entitys.ERole;
 import com.example.springsecurity.entitys.Role;
 import com.example.springsecurity.entitys.User;
-import com.example.springsecurity.repositorys.IRoleRepository;
-import com.example.springsecurity.repositorys.IUserRepository;
-import io.cqrs.services.command.IBaseCommandService;
+import com.example.springsecurity.mappers.IRoleRepository;
+import com.example.springsecurity.mappers.IUserRepository;
+import io.cqrs.command.ICommandHandler;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 @Service
-public class SignupCommandSV implements IBaseCommandService<SignupResponse, SignupRequest> {
+@Transactional
+public class SignupCommandSV implements ICommandHandler<SignupResponse, SignupRequest> {
     private final PasswordEncoder encoder;
     private final IUserRepository userRepository;
     private final IRoleRepository roleRepository;

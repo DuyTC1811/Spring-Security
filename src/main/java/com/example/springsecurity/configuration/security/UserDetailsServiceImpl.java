@@ -1,7 +1,7 @@
 package com.example.springsecurity.configuration.security;
 
-import com.example.springsecurity.entitys.User;
-import com.example.springsecurity.mappers.IUserRepository;
+import com.example.springsecurity.models.UserInfo;
+import com.example.springsecurity.mappers.IQueryUserMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,18 +11,18 @@ import java.util.Objects;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final IUserRepository userRepository;
+    private final IQueryUserMapper queryUserMapper;
 
-    public UserDetailsServiceImpl(IUserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserDetailsServiceImpl(IQueryUserMapper queryUserMapper) {
+        this.queryUserMapper = queryUserMapper;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (Objects.isNull(user)) {
+        UserInfo userInfo = queryUserMapper.findByUsername(username);
+        if (Objects.isNull(userInfo)) {
             throw new UsernameNotFoundException("User Not Found with username: " + username);
         }
-        return UserDetailsImpl.build(user);
+        return UserDetailsImpl.build(userInfo);
     }
 }

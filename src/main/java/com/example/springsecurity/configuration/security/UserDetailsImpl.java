@@ -1,6 +1,7 @@
 package com.example.springsecurity.configuration.security;
 
-import com.example.springsecurity.entitys.User;
+import com.example.springsecurity.dto.requests.RegisterUserRequest;
+import com.example.springsecurity.models.UserInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -9,10 +10,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
-    private String uuid;
+    private UUID uuid;
 
     private String username;
 
@@ -22,7 +24,7 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String uuid, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(UUID uuid, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.uuid = uuid;
         this.username = username;
         this.email = email;
@@ -30,10 +32,9 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(User user) {
+    public static UserDetailsImpl build(UserInfo user) {
         List<GrantedAuthority> authorities = user.getRoles()
-                .stream().map(role -> new SimpleGrantedAuthority(
-                        role.getName().name()))
+                .stream().map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
         return new UserDetailsImpl(user.getUuid(), user.getUsername(), user.getEmail(), user.getPassword(), authorities);
@@ -44,7 +45,7 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
-    public String getId() {
+    public UUID getId() {
         return uuid;
     }
 

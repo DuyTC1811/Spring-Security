@@ -4,7 +4,7 @@ server:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-  type-aliases-package: com.example.springsecurity.dto.*   # Quét thư mục
+  type-aliases-package: com.example.springsecurity.dto.*, com.example.springsecurity.models  # Scan folder
   mapper-locations: /mybatis/*.xml
 
 spring:

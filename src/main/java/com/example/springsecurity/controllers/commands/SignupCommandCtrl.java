@@ -1,7 +1,7 @@
 package com.example.springsecurity.controllers.commands;
 
-import com.example.springsecurity.dto.requests.SignupRequest;
-import com.example.springsecurity.dto.response.SignupResponse;
+import com.example.springsecurity.dto.requests.RegisterUserRequest;
+import com.example.springsecurity.dto.response.RegisterResponse;
 import io.cqrs.controller.CommandController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +15,11 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "API auth", description = "Auth management")
-public class SignupCommandCtrl extends CommandController<SignupResponse, SignupRequest> {
+public class SignupCommandCtrl extends CommandController<RegisterResponse, RegisterUserRequest> {
     @Override
     @PostMapping("/sing-up")
-    protected ResponseEntity<SignupResponse> coordinator(@Valid @RequestBody SignupRequest signupRequest) {
-        return execute(signupRequest);
+    protected ResponseEntity<RegisterResponse> coordinator(@Valid @RequestBody RegisterUserRequest request) {
+        return execute(request);
     }
 
 }

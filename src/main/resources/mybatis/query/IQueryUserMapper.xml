@@ -1,0 +1,16 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.springsecurity.mappers.IQueryUserMapper">
+    <select id="findByUsername" parameterType="string" resultType="UserInfo">
+    SELECT USER_ID, ROLE_ID, USERNAME, FIRST_NAME, LAST_NAME, NAME, MOBILE, EMAIL, CCCD, PASSWORD_HASH, REGISTERED_AT FROM ROLE WHERE USERNAME = #{USERNAME} AND ACTIVE = 'ACTIVE';
+    </select>
+
+    <select id="checkUserExists" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM USER WHERE USERNAME = #{username} AND ACTIVE = 'ACTIVE');
+    </select>
+
+    <select id="checkEmailExists" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM USER WHERE EMAIL = #{email} AND ACTIVE = 'ACTIVE');
+    </select>
+</mapper>

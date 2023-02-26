@@ -10,4 +10,6 @@ public interface IQueryUserMapper {
     boolean checkUserExists(String username);
 
     boolean checkEmailExists(String email);
+
+    boolean checkMobileExists(String email);
 }

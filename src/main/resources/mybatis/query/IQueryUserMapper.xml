@@ -26,4 +26,8 @@
     <select id="checkEmailExists" parameterType="string" resultType="boolean">
         SELECT EXISTS(SELECT 1 FROM "user" WHERE EMAIL = #{email} AND ACTIVE = 'ACTIVE');
     </select>
+
+    <select id="checkMobileExists" parameterType="string" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM "user" WHERE PHONE = #{phone} AND ACTIVE = 'ACTIVE');
+    </select>
 </mapper>

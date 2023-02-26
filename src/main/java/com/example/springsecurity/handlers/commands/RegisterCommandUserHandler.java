@@ -29,7 +29,6 @@ public class RegisterCommandUserHandler implements ICommandHandler<RegisterUserR
     private final ICommandUserMapper commandUserMapper;
     private final IQueryRoleMapper queryRoleMapper;
     private final IQueryUserMapper queryUserMapper;
-    private final IQueryPermissionMapper permissionMapper;
 
     /**
      * register User
@@ -42,14 +41,15 @@ public class RegisterCommandUserHandler implements ICommandHandler<RegisterUserR
         if (queryUserMapper.checkEmailExists(request.getEmail())) {
             return new RegisterUserResponse("Error: Email is already in use!");
         }
+        if (queryUserMapper.checkMobileExists(request.getMobile())) {
+            return new RegisterUserResponse("Error: Phone is already in use!");
+        }
         // Create new user's account
         request.setUuid(UUID.randomUUID().toString());
         request.setPassword(encoder.encode(request.getPassword()));
         request.setRegisteredAt(Timestamp.from(Instant.now()));
         Set<String> strRoles = request.getRolesId();
-        Set<String> strPermissions = request.getPermissionId();
         Set<String> roles = new HashSet<>();
-        Set<String> permissions = new HashSet<>();
 
         if (strRoles == null) {
             String userRole = queryRoleMapper.findByRoleName(ROLE_USER.name());
@@ -73,30 +73,7 @@ public class RegisterCommandUserHandler implements ICommandHandler<RegisterUserR
                 }
             });
         }
-
-        if (strPermissions == null) {
-            String userPermissions = permissionMapper.findByPermissionName(EPermission.READ.name());
-            permissions.add(userPermissions);
-        } else {
-            strPermissions.forEach(permission -> {
-                switch (permission) {
-                    case "READ":
-                        String read = permissionMapper.findByPermissionName(EPermission.READ.name());
-                        permissions.add(read);
-                        break;
-                    case "WRITE":
-                        String write = permissionMapper.findByPermissionName(EPermission.WRITE.name());
-                        permissions.add(write);
-                        break;
-                    case "READ_WRITE":
-                        String readWrite = permissionMapper.findByPermissionName(EPermission.READ_WRITE.name());
-                        permissions.add(readWrite);
-                    default:
-                }
-            });
-        }
         request.setRolesId(roles);
-        request.setPermissionId(permissions);
         commandUserMapper.registerUser(request);
         return new RegisterUserResponse("User registered successfully! id = " + request.getUuid());
     }

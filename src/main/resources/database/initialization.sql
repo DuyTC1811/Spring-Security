@@ -8,13 +8,13 @@ DROP TABLE IF EXISTS permission;
 
 CREATE TABLE role
 (
-    role_id     VARCHAR(36)  NOT NULL,
-    title       VARCHAR(30)  NOT NULL,
-    slug        VARCHAR(10)  NOT NULL,
-    active      varchar(10)  NOT NULL DEFAULT 'ACTIVE',
-    description varchar(200) NULL,
-    created_at  DATE         NOT NULL,
-    updated_at  DATE         NULL     DEFAULT NULL,
+    role_id       VARCHAR(36)  NOT NULL,
+    title         VARCHAR(30)  NOT NULL,
+    slug          VARCHAR(10)  NOT NULL,
+    active        varchar(10)  NOT NULL DEFAULT 'ACTIVE',
+    description   varchar(200) NULL,
+    created_at    DATE         NOT NULL,
+    updated_at    DATE         NULL     DEFAULT NULL,
     PRIMARY KEY (role_id)
 );
 CREATE UNIQUE INDEX "index_slug" ON role (slug ASC);
@@ -42,24 +42,17 @@ CREATE TABLE "user"
     mobile        VARCHAR(15) NULL,
     email         VARCHAR(50) NULL,
     cccd          VARCHAR(12) NULL,
+    permission_id VARCHAR(36)  NOT NULL,
     active        varchar(10) NOT NULL DEFAULT 'ACTIVE',
     password_hash VARCHAR(60) NOT NULL,
     registered_at DATE        NOT NULL,
     lastLogin     DATE        NULL     DEFAULT NULL,
-    PRIMARY KEY (user_id)
+    PRIMARY KEY (user_id),
+    CONSTRAINT fkr_user FOREIGN KEY (permission_id) REFERENCES permission (permission_id) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 CREATE UNIQUE INDEX "index_mobile" ON "user" (mobile ASC);
 CREATE UNIQUE INDEX "index_mail" ON "user" (email ASC);
-
-CREATE TABLE role_permission
-(
-    permission_id VARCHAR(36) NOT NULL,
-    role_id       VARCHAR(36) NOT NULL,
-    PRIMARY KEY (permission_id, role_id),
-    CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role (role_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
-    CONSTRAINT fk_permission FOREIGN KEY (permission_id) REFERENCES permission (permission_id) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
 
 CREATE TABLE user_role
 (

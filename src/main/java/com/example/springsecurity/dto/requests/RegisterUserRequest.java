@@ -33,6 +33,6 @@ public class RegisterUserRequest implements ICommand<RegisterUserResponse> {
     private String password;
     private Set<String> rolesId;
     private String fistNamle;
-    private Set<String> permissionId;
+    private String permissionId;
     private Timestamp registeredAt;
 }

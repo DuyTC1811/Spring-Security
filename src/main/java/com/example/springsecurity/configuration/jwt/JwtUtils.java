@@ -35,6 +35,7 @@ public class JwtUtils {
         // Thêm những thông tin vào trong token
         Map<String, Object> claims = new HashMap<>();
         claims.put("pass", userPrincipal.getPassword());
+        claims.put("mobile", userPrincipal.getMobile());
         claims.put("email", userPrincipal.getEmail());
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
@@ -50,7 +51,7 @@ public class JwtUtils {
     }
 
     /**
-     * Phương thức này dùng để check Token có hợp lệ không
+     * Phương thức này dùng để check Token
      * jwtSecret: mã key dùng để đối chiếu
      *
      * @param authToken một chuỗi Token

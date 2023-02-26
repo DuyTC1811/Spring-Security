@@ -2,6 +2,7 @@ package com.example.springsecurity.configuration.security;
 
 import com.example.springsecurity.models.UserInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Data
 public class UserDetailsImpl implements UserDetails {
     private String uuid;
 
@@ -18,14 +20,17 @@ public class UserDetailsImpl implements UserDetails {
 
     private String email;
 
+    private String mobile;
+
     @JsonIgnore
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String uuid, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(String uuid, String username, String email, String mobile, String password, Collection<? extends GrantedAuthority> authorities) {
         this.uuid = uuid;
         this.username = username;
         this.email = email;
+        this.mobile = mobile;
         this.password = password;
         this.authorities = authorities;
     }
@@ -35,20 +40,12 @@ public class UserDetailsImpl implements UserDetails {
                 .stream().map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        return new UserDetailsImpl(user.getUuid(), user.getUsername(), user.getEmail(), user.getPassword(), authorities);
+        return new UserDetailsImpl(user.getUserId(), user.getUsername(), user.getEmail(), user.getMobile(), user.getPassword(), authorities);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
-    }
-
-    public String getId() {
-        return uuid;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     @Override

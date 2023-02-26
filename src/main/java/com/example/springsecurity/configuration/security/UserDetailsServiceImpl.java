@@ -7,7 +7,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -23,6 +25,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (Objects.isNull(userInfo)) {
             throw new UsernameNotFoundException("User Not Found with username: " + username);
         }
+        Set<String> roles = queryUserMapper.findByUserRoles(username);
+        userInfo.setRoles(roles);
         return UserDetailsImpl.build(userInfo);
     }
 }

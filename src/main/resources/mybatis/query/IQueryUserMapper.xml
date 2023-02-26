@@ -4,7 +4,6 @@
 <mapper namespace="com.example.springsecurity.mappers.IQueryUserMapper">
     <select id="findByUsername" resultType="UserInfo">
         SELECT USER_ID,
-               ROLE_ID,
                USERNAME,
                FIRST_NAME,
                LAST_NAME,
@@ -12,11 +11,21 @@
                MOBILE,
                EMAIL,
                CCCD,
-               PASSWORD_HASH,
+               PASSWORD,
                REGISTERED_AT
-        FROM ROLE
+        FROM "user"
         WHERE USERNAME = #{username}
           AND ACTIVE = 'ACTIVE';
+    </select>
+
+    <select id="findByUserRoles" resultType="java.lang.String">
+        SELECT R.SLUG
+        FROM "user" AS U
+                 INNER JOIN USER_ROLE AS USR ON U.USER_ID = USR.USER_ID
+                 INNER JOIN ROLE AS R ON R.ROLE_ID = USR.ROLE_ID
+        WHERE U.USERNAME = #{username}
+          AND R.ACTIVE = 'ACTIVE'
+          AND U.ACTIVE = 'ACTIVE';
     </select>
 
     <select id="checkUserExists" resultType="boolean">

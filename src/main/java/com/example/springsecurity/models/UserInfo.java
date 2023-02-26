@@ -4,11 +4,10 @@ import lombok.Data;
 
 import java.sql.Timestamp;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 public class UserInfo {
-    private String uuid;
+    private String userId;
     private String name;
     private String email;
     private String mobile;
@@ -16,6 +15,6 @@ public class UserInfo {
     private String lastName;
     private String password;
     private Set<String> roles;
-    private String fistNamle;
+    private String firstName;
     private Timestamp registeredAt;
 }

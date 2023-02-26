@@ -3,7 +3,10 @@
 
 <mapper namespace="com.example.springsecurity.mappers.IQueryRoleMapper">
     <select id="findByRoleName" resultType="string">
-    SELECT ROLE_ID FROM ROLE WHERE SLUG = #{slug} AND ACTIVE = 'ACTIVE';
+        SELECT ROLE_ID
+        FROM ROLE
+        WHERE SLUG = #{slug}
+          AND ACTIVE = 'ACTIVE';
     </select>
 
     <select id="listRole" resultType="hashmap">

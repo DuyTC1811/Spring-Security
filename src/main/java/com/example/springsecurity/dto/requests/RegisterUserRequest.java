@@ -1,6 +1,6 @@
 package com.example.springsecurity.dto.requests;
 
-import com.example.springsecurity.dto.response.RegisterResponse;
+import com.example.springsecurity.dto.response.RegisterUserResponse;
 import io.cqrs.command.ICommand;
 import lombok.Builder;
 import lombok.Data;
@@ -11,24 +11,28 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.Set;
-import java.util.UUID;
 
 @Data
 @Builder
 @EqualsAndHashCode(callSuper = false)
-public class RegisterUserRequest implements ICommand<RegisterResponse> {
-    private UUID uuid;
-    @NotBlank @Size(min = 3, max = 20)
+public class RegisterUserRequest implements ICommand<RegisterUserResponse> {
+    private String uuid;
+    @NotBlank
+    @Size(min = 3, max = 20)
     private String name;
-    @NotBlank @Size(max = 50)
+    private String cccd;
+    @NotBlank
+    @Size(max = 50)
     @Email(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")
     private String email;
     private String mobile;
     private String username;
     private String lastName;
-    @NotBlank @Size(min = 6, max = 40)
+    @NotBlank
+    @Size(min = 6, max = 40)
     private String password;
-    private Set<String> roles;
+    private Set<String> rolesId;
     private String fistNamle;
+    private Set<String> permissionId;
     private Timestamp registeredAt;
 }

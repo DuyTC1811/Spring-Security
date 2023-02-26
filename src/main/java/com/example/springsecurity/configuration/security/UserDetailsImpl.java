@@ -1,6 +1,5 @@
 package com.example.springsecurity.configuration.security;
 
-import com.example.springsecurity.dto.requests.RegisterUserRequest;
 import com.example.springsecurity.models.UserInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,11 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
-    private UUID uuid;
+    private String uuid;
 
     private String username;
 
@@ -24,7 +22,7 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(UUID uuid, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(String uuid, String username, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.uuid = uuid;
         this.username = username;
         this.email = email;
@@ -45,7 +43,7 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
-    public UUID getId() {
+    public String getId() {
         return uuid;
     }
 

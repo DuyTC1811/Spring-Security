@@ -5,7 +5,7 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   type-aliases-package: com.example.springsecurity.dto.*, com.example.springsecurity.models  # Scan folder
-  mapper-locations: /mybatis/*.xml
+  mapper-locations: /mybatis/*/*.xml
 
 spring:
   jpa:
@@ -42,6 +42,5 @@ spring:
 
 logging:
   level:
-    com.example.springmybatis.mapper: TRACE
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.example.springmybatis.mapper.*: TRACE
 

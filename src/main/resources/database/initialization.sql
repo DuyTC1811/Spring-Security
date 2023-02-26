@@ -1,33 +1,40 @@
+DROP TABLE IF EXISTS "userInfo";
+
+DROP TABLE IF EXISTS role_permission;
+
+DROP TABLE IF EXISTS role;
+
+DROP TABLE IF EXISTS permission;
+
 CREATE TABLE role
 (
-    role_id     UUID,
-    title       VARCHAR(30) NOT NULL,
-    slug        VARCHAR(10) NOT NULL,
-    active      varchar(10) NOT NULL DEFAULT 'ACTIVE',
+    role_id     VARCHAR(36)  NOT NULL,
+    title       VARCHAR(30)  NOT NULL,
+    slug        VARCHAR(10)  NOT NULL,
+    active      varchar(10)  NOT NULL DEFAULT 'ACTIVE',
     description varchar(200) NULL,
-    created_at  DATE        NOT NULL,
-    updated_at  DATE NULL DEFAULT NULL,
+    created_at  DATE         NOT NULL,
+    updated_at  DATE         NULL     DEFAULT NULL,
     PRIMARY KEY (role_id)
 );
 CREATE UNIQUE INDEX "index_slug" ON role (slug ASC);
 
 CREATE TABLE permission
 (
-    permission_id UUID,
-    title         VARCHAR(30) NOT NULL,
-    slug          VARCHAR(10) NOT NULL,
+    permission_id VARCHAR(36)  NOT NULL,
+    title         VARCHAR(30)  NOT NULL,
+    slug          VARCHAR(10)  NOT NULL,
     description   varchar(200) NULL,
-    active        varchar(10) NOT NULL DEFAULT 'ACTIVE',
-    created_at    DATE        NOT NULL,
-    updated_at    DATE NULL DEFAULT NULL,
+    active        varchar(10)  NOT NULL DEFAULT 'ACTIVE',
+    created_at    DATE         NOT NULL,
+    updated_at    DATE         NULL     DEFAULT NULL,
     PRIMARY KEY (permission_id)
 );
 CREATE UNIQUE INDEX "index_per_slug" ON permission (slug ASC);
 
-CREATE TABLE "userInfo"
+CREATE TABLE "user"
 (
-    user_id       UUID,
-    role_id       UUID,
+    user_id       VARCHAR(36) NOT NULL,
     username      VARCHAR(10) NULL,
     first_name    VARCHAR(10) NULL,
     last_name     VARCHAR(10) NULL,
@@ -36,30 +43,41 @@ CREATE TABLE "userInfo"
     email         VARCHAR(50) NULL,
     cccd          VARCHAR(12) NULL,
     active        varchar(10) NOT NULL DEFAULT 'ACTIVE',
-    password_hash VARCHAR(36) NOT NULL,
+    password_hash VARCHAR(60) NOT NULL,
     registered_at DATE        NOT NULL,
-    lastLogin     DATE NULL DEFAULT NULL,
-    PRIMARY KEY (user_id),
-    CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES role (role_id) ON DELETE NO ACTION ON UPDATE NO ACTION
+    lastLogin     DATE        NULL     DEFAULT NULL,
+    PRIMARY KEY (user_id)
 );
 
-CREATE UNIQUE INDEX "idx_user_role" ON "userInfo" (role_id ASC);
-CREATE UNIQUE INDEX "index_mobile" ON "userInfo" (mobile ASC);
-CREATE UNIQUE INDEX "index_mail" ON "userInfo" (email ASC);
+CREATE UNIQUE INDEX "index_mobile" ON "user" (mobile ASC);
+CREATE UNIQUE INDEX "index_mail" ON "user" (email ASC);
 
 CREATE TABLE role_permission
 (
-    permission_id UUID,
-    role_id       UUID,
+    permission_id VARCHAR(36) NOT NULL,
+    role_id       VARCHAR(36) NOT NULL,
     PRIMARY KEY (permission_id, role_id),
     CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role (role_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
     CONSTRAINT fk_permission FOREIGN KEY (permission_id) REFERENCES permission (permission_id) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
-INSERT INTO role (role_id, title, slug, active, description, created_at, updated_at)
-VALUES ('8cf8a4ad-746b-43fd-9c3e-87681a55380e', 'Cấp ADMIN', 'ADMIN', 'ACTIVE', 'Thông tin mô tả ADMIN', '2023-02-25',
-        NULL),
-       ('0124f4ad-ea1e-47f3-8a23-b53f0c21c90b', 'Cấp User', 'USER', 'ACTIVE', 'Thông tin mô tả USER', '2023-02-25',
-        NULL),
+CREATE TABLE user_role
+(
+    user_id VARCHAR(36) NOT NULL,
+    role_id VARCHAR(36) NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    CONSTRAINT fku_role FOREIGN KEY (role_id) REFERENCES role (role_id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT fkr_user FOREIGN KEY (user_id) REFERENCES "user" (user_id) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
+INSERT INTO role (role_id, title, slug, active, description, created_at)
+VALUES ('8cf8a4ad-746b-43fd-9c3e-87681a55380e', 'Cấp ADMIN', 'ADMIN', 'ACTIVE', 'Thông tin mô tả ADMIN', '2023-02-25'),
+       ('0124f4ad-ea1e-47f3-8a23-b53f0c21c90b', 'Cấp User', 'USER', 'ACTIVE', 'Thông tin mô tả USER', '2023-02-25'),
        ('469bbb21-79ce-43a0-b8aa-9ee181572109', 'Cấp Manage', 'MANAGER', 'ACTIVE', 'Thông tin mô tả MANAGER',
-        '2023-02-25', NULL);
+        '2023-02-25');
+
+INSERT INTO permission (permission_id, title, slug, description, active, created_at)
+VALUES ('e3628c46-3142-4b36-ab9b-28dcfdf5f8e4', 'Quyền đọc', 'READ', 'Chỉ đọc', 'ACTIVE', '2023-02-26'),
+       ('878d896a-b395-4962-9fb3-1a087f0cbe25', 'Quyền nghi', 'WRITE', 'Chỉ ghi', 'ACTIVE', '2023-02-26'),
+       ('8deec71b-03e3-4172-b909-3b5eda6828ae', 'Quyền đọc lẫn ghi', 'READ_WRITE', 'cả đọc lần ghi', 'ACTIVE',
+        '2023-02-26');

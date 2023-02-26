@@ -1,11 +1,14 @@
 package com.example.springsecurity.handlers.commands;
 
 import com.example.springsecurity.dto.requests.RegisterUserRequest;
-import com.example.springsecurity.dto.response.RegisterResponse;
+import com.example.springsecurity.dto.response.RegisterUserResponse;
 import com.example.springsecurity.mappers.ICommandUserMapper;
+import com.example.springsecurity.mappers.IQueryPermissionMapper;
 import com.example.springsecurity.mappers.IQueryRoleMapper;
 import com.example.springsecurity.mappers.IQueryUserMapper;
+import com.example.springsecurity.models.EPermission;
 import io.cqrs.command.ICommandHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,36 +23,33 @@ import static com.example.springsecurity.models.ERole.*;
 
 @Service
 @Transactional
-public class RegisterCommandUserHandler implements ICommandHandler<RegisterResponse, RegisterUserRequest> {
+@RequiredArgsConstructor
+public class RegisterCommandUserHandler implements ICommandHandler<RegisterUserResponse, RegisterUserRequest> {
     private final PasswordEncoder encoder;
     private final ICommandUserMapper commandUserMapper;
     private final IQueryRoleMapper queryRoleMapper;
     private final IQueryUserMapper queryUserMapper;
-
-    public RegisterCommandUserHandler(PasswordEncoder encoder, ICommandUserMapper commandUserMapper, IQueryRoleMapper queryRoleMapper, IQueryUserMapper queryUserMapper) {
-        this.encoder = encoder;
-        this.commandUserMapper = commandUserMapper;
-        this.queryRoleMapper = queryRoleMapper;
-        this.queryUserMapper = queryUserMapper;
-    }
+    private final IQueryPermissionMapper permissionMapper;
 
     /**
      * register User
      */
     @Override
-    public RegisterResponse handler(RegisterUserRequest request) {
+    public RegisterUserResponse handler(RegisterUserRequest request) {
         if (queryUserMapper.checkUserExists(request.getUsername())) {
-            return new RegisterResponse("Error: Username is already taken!");
+            return new RegisterUserResponse("Error: Username is already taken!");
         }
         if (queryUserMapper.checkEmailExists(request.getEmail())) {
-            return new RegisterResponse("Error: Email is already in use!");
+            return new RegisterUserResponse("Error: Email is already in use!");
         }
         // Create new user's account
-        request.setUuid(UUID.randomUUID());
+        request.setUuid(UUID.randomUUID().toString());
         request.setPassword(encoder.encode(request.getPassword()));
         request.setRegisteredAt(Timestamp.from(Instant.now()));
-        Set<String> strRoles = request.getRoles();
+        Set<String> strRoles = request.getRolesId();
+        Set<String> strPermissions = request.getPermissionId();
         Set<String> roles = new HashSet<>();
+        Set<String> permissions = new HashSet<>();
 
         if (strRoles == null) {
             String userRole = queryRoleMapper.findByRoleName(ROLE_USER.name());
@@ -57,22 +57,47 @@ public class RegisterCommandUserHandler implements ICommandHandler<RegisterRespo
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
-                    case "admin":
-                        String adminRole = queryRoleMapper.findByRoleName(ROLE_ADMIN.getName());
-                        roles.add(adminRole);
+                    case "ADMIN":
+                        String admin = queryRoleMapper.findByRoleName(ROLE_ADMIN.getName());
+                        roles.add(admin);
                         break;
-                    case "manage":
-                        String modRole = queryRoleMapper.findByRoleName(ROLE_MANAGER.getName());
-                        roles.add(modRole);
+                    case "MANAGER":
+                        String manager = queryRoleMapper.findByRoleName(ROLE_MANAGER.getName());
+                        roles.add(manager);
                         break;
+                    case "USER":
+                        String user = queryRoleMapper.findByRoleName(ROLE_MANAGER.getName());
+                        roles.add(user);
                     default:
-                        String userRole = queryRoleMapper.findByRoleName(ROLE_USER.getName());
-                        roles.add(userRole);
+                        new RegisterUserResponse(role + "Role does not exist !");
                 }
             });
         }
-        request.setRoles(roles);
+
+        if (strPermissions == null) {
+            String userPermissions = permissionMapper.findByPermissionName(EPermission.READ.name());
+            permissions.add(userPermissions);
+        } else {
+            strPermissions.forEach(permission -> {
+                switch (permission) {
+                    case "READ":
+                        String read = permissionMapper.findByPermissionName(EPermission.READ.name());
+                        permissions.add(read);
+                        break;
+                    case "WRITE":
+                        String write = permissionMapper.findByPermissionName(EPermission.WRITE.name());
+                        permissions.add(write);
+                        break;
+                    case "READ_WRITE":
+                        String readWrite = permissionMapper.findByPermissionName(EPermission.READ_WRITE.name());
+                        permissions.add(readWrite);
+                    default:
+                }
+            });
+        }
+        request.setRolesId(roles);
+        request.setPermissionId(permissions);
         commandUserMapper.registerUser(request);
-        return new RegisterResponse("User registered successfully! id = " + request.getUuid());
+        return new RegisterUserResponse("User registered successfully! id = " + request.getUuid());
     }
 }

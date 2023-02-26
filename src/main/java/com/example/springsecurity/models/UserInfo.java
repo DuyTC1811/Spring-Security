@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Data
 public class UserInfo {
-    private UUID uuid;
+    private String uuid;
     private String name;
     private String email;
     private String mobile;

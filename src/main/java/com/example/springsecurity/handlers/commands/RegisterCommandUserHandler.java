@@ -2,11 +2,9 @@ package com.example.springsecurity.handlers.commands;
 
 import com.example.springsecurity.dto.requests.RegisterUserRequest;
 import com.example.springsecurity.dto.response.RegisterUserResponse;
-import com.example.springsecurity.mappers.ICommandUserMapper;
-import com.example.springsecurity.mappers.IQueryPermissionMapper;
-import com.example.springsecurity.mappers.IQueryRoleMapper;
-import com.example.springsecurity.mappers.IQueryUserMapper;
-import com.example.springsecurity.models.EPermission;
+import com.example.springsecurity.mappers.commands.ICommandUserMapper;
+import com.example.springsecurity.mappers.queries.IQueryRoleMapper;
+import com.example.springsecurity.mappers.queries.IQueryUserMapper;
 import io.cqrs.command.ICommandHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,9 +24,9 @@ import static com.example.springsecurity.models.ERole.*;
 @RequiredArgsConstructor
 public class RegisterCommandUserHandler implements ICommandHandler<RegisterUserResponse, RegisterUserRequest> {
     private final PasswordEncoder encoder;
-    private final ICommandUserMapper commandUserMapper;
     private final IQueryRoleMapper queryRoleMapper;
     private final IQueryUserMapper queryUserMapper;
+    private final ICommandUserMapper commandUserMapper;
 
     /**
      * register User

@@ -1,4 +1,4 @@
-package com.example.springsecurity.mappers;
+package com.example.springsecurity.mappers.commands;
 
 import com.example.springsecurity.dto.requests.RegisterUserRequest;
 import org.apache.ibatis.annotations.Mapper;

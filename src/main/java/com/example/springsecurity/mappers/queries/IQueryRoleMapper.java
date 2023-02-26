@@ -1,4 +1,4 @@
-package com.example.springsecurity.mappers;
+package com.example.springsecurity.mappers.queries;
 
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;

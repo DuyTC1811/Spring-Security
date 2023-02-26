@@ -1,13 +1,12 @@
 package com.example.springsecurity.configuration.security;
 
 import com.example.springsecurity.models.UserInfo;
-import com.example.springsecurity.mappers.IQueryUserMapper;
+import com.example.springsecurity.mappers.queries.IQueryUserMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 

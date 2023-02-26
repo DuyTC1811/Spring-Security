@@ -1,4 +1,4 @@
-package com.example.springsecurity.mappers;
+package com.example.springsecurity.mappers.queries;
 
 import com.example.springsecurity.models.UserInfo;
 import org.apache.ibatis.annotations.Mapper;

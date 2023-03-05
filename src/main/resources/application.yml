@@ -40,6 +40,10 @@ spring:
     username: postgres
     password: duytc
 
+#grpc:
+#  netty-server:
+#    additional-listen-addresses:
+
 logging:
   level:
     com.example.springmybatis.mapper.*: TRACE

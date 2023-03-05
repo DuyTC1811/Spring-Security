@@ -35,6 +35,6 @@ public class LoginQueryHandler implements IQueryHandler<LoginResponse, LoginRequ
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        return new LoginResponse(jwt, userDetails.getUuid(), userDetails.getUsername(), userDetails.getEmail(), roles);
+        return new LoginResponse(jwt, userDetails.getUuid(), userDetails.getUsername(), userDetails.getUserCode(), userDetails.getEmail(), roles);
     }
 }

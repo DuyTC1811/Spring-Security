@@ -4,8 +4,7 @@
 <mapper namespace="com.example.springsecurity.mappers.commands.ICommandUserMapper">
     <insert id="registerUser" parameterType="registerUserRequest">
         INSERT INTO "user" (USER_ID, USERNAME, FIRST_NAME, LAST_NAME, NAME, MOBILE, EMAIL, CCCD, PERMISSION_ID, PASSWORD, REGISTERED_AT)
-        VALUES (#{uuid}, #{username}, #{fistNamle}, #{lastName}, #{name}, #{mobile}, #{email}, #{cccd}, #{permissionId}, #{password},
-        #{registeredAt});
+        VALUES (#{uuid}, #{username}, #{fistNamle}, #{lastName}, #{name}, #{mobile}, #{email}, #{cccd}, #{permissionId}, #{password}, #{registeredAt});
         <foreach collection="rolesId" item="roleId">
             INSERT INTO USER_ROLE (USER_ID, ROLE_ID) VALUES (#{uuid}, #{roleId});
         </foreach>

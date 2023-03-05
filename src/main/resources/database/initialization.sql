@@ -1,20 +1,20 @@
-DROP TABLE IF EXISTS "userInfo";
+DROP TABLE IF EXISTS USER_ROLE;
 
-DROP TABLE IF EXISTS role_permission;
+DROP TABLE IF EXISTS ROLE;
 
-DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS "USER";
 
-DROP TABLE IF EXISTS permission;
+DROP TABLE IF EXISTS PERMISSION;
 
 CREATE TABLE role
 (
-    role_id       VARCHAR(36)  NOT NULL,
-    title         VARCHAR(30)  NOT NULL,
-    slug          VARCHAR(10)  NOT NULL,
-    active        varchar(10)  NOT NULL DEFAULT 'ACTIVE',
-    description   varchar(200) NULL,
-    created_at    DATE         NOT NULL,
-    updated_at    DATE         NULL     DEFAULT NULL,
+    role_id     VARCHAR(36)  NOT NULL,
+    title       VARCHAR(30)  NOT NULL,
+    slug        VARCHAR(10)  NOT NULL,
+    active      varchar(10)  NOT NULL DEFAULT 'ACTIVE',
+    description varchar(200) NULL,
+    created_at  DATE         NOT NULL,
+    updated_at  DATE         NULL     DEFAULT NULL,
     PRIMARY KEY (role_id)
 );
 CREATE UNIQUE INDEX "index_slug" ON role (slug ASC);
@@ -32,9 +32,12 @@ CREATE TABLE permission
 );
 CREATE UNIQUE INDEX "index_per_slug" ON permission (slug ASC);
 
+
+CREATE SEQUENCE IF NOT EXISTS auto_user_code;
 CREATE TABLE "user"
 (
     user_id       VARCHAR(36) NOT NULL,
+    user_code     VARCHAR(10) NOT NULL UNIQUE DEFAULT CONCAT('NV', LPAD(NEXTVAL('auto_user_code')::text, 6, '0')),
     username      VARCHAR(10) NULL,
     first_name    VARCHAR(10) NULL,
     last_name     VARCHAR(10) NULL,
@@ -42,11 +45,11 @@ CREATE TABLE "user"
     mobile        VARCHAR(15) NULL,
     email         VARCHAR(50) NULL,
     cccd          VARCHAR(12) NULL,
-    permission_id VARCHAR(36)  NOT NULL,
-    active        varchar(10) NOT NULL DEFAULT 'ACTIVE',
-    password_hash VARCHAR(60) NOT NULL,
+    permission_id VARCHAR(36) NOT NULL,
+    active        varchar(10) NOT NULL        DEFAULT 'ACTIVE',
+    password VARCHAR(60) NOT NULL,
     registered_at DATE        NOT NULL,
-    lastLogin     DATE        NULL     DEFAULT NULL,
+    lastLogin     DATE        NULL            DEFAULT NULL,
     PRIMARY KEY (user_id),
     CONSTRAINT fkr_user FOREIGN KEY (permission_id) REFERENCES permission (permission_id) ON DELETE NO ACTION ON UPDATE NO ACTION
 );

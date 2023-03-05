@@ -5,6 +5,7 @@
     <select id="findByUsername" resultType="UserInfo">
         SELECT USER_ID,
                USERNAME,
+               USER_CODE,
                FIRST_NAME,
                LAST_NAME,
                NAME,
@@ -37,6 +38,6 @@
     </select>
 
     <select id="checkMobileExists" parameterType="string" resultType="boolean">
-        SELECT EXISTS(SELECT 1 FROM "user" WHERE PHONE = #{phone} AND ACTIVE = 'ACTIVE');
+        SELECT EXISTS(SELECT 1 FROM "user" WHERE MOBILE = #{moblie} AND ACTIVE = 'ACTIVE');
     </select>
 </mapper>

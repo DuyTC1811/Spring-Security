@@ -9,6 +9,7 @@ import java.util.Set;
 public class UserInfo {
     private String userId;
     private String name;
+    private String userCode;
     private String email;
     private String mobile;
     private String username;

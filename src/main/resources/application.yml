@@ -8,11 +8,11 @@ mybatis:
   mapper-locations: /mybatis/*/*.xml
 
 spring:
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    open-in-view: false
+#  jpa:
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: update
+#    open-in-view: false
 
   security:
     jwtSecret: DUY-TC

@@ -9,8 +9,8 @@ import io.cqrs.command.ICommandHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashSet;
@@ -55,19 +55,17 @@ public class RegisterCommandUserHandler implements ICommandHandler<RegisterUserR
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
-                    case "ADMIN":
-                        String admin = queryRoleMapper.findByRoleName(ROLE_ADMIN.getName());
+                    case "ADMIN": String admin = queryRoleMapper.findByRoleName(ROLE_ADMIN.getName());
                         roles.add(admin);
                         break;
-                    case "MANAGER":
-                        String manager = queryRoleMapper.findByRoleName(ROLE_MANAGER.getName());
+                    case "MANAGER": String manager = queryRoleMapper.findByRoleName(ROLE_MANAGER.getName());
                         roles.add(manager);
                         break;
-                    case "USER":
-                        String user = queryRoleMapper.findByRoleName(ROLE_MANAGER.getName());
+                    case "USER": String user = queryRoleMapper.findByRoleName(ROLE_USER.getName());
                         roles.add(user);
+                        break;
                     default:
-                        new RegisterUserResponse(role + "Role does not exist !");
+                        new RegisterUserResponse(role + " Role does not exist !");
                 }
             });
         }

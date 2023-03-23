@@ -6,11 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
@@ -32,13 +35,16 @@ public class JwtUtils {
         Date currentDate = new Date();
 
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        List<String> roles = userPrincipal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
         // Thêm những thông tin vào trong token
         Map<String, Object> claims = new HashMap<>();
-        claims.put("pass", userPrincipal.getPassword());
-        claims.put("mobile", userPrincipal.getMobile());
-        claims.put("email", userPrincipal.getEmail());
+        claims.put("username", userPrincipal.getUsername());
+        claims.put("userCode", userPrincipal.getUserCode());
+        claims.put("roles", roles);
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
+                .setSubject(userPrincipal.getUsername())
                 .setClaims(claims)
                 .setIssuedAt(currentDate)
                 .setExpiration(new Date(currentDate.getTime() + jwtExpirationMs))

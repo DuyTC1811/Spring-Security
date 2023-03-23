@@ -1,19 +1,14 @@
 package com.example.springsecurity.handlers.queries;
 
 import com.example.springsecurity.configuration.jwt.JwtUtils;
-import com.example.springsecurity.configuration.security.UserDetailsImpl;
 import com.example.springsecurity.dto.requests.LoginRequest;
 import com.example.springsecurity.dto.response.LoginResponse;
 import io.cqrs.query.IQueryHandler;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class LoginQueryHandler implements IQueryHandler<LoginResponse, LoginRequest> {

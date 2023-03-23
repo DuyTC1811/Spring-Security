@@ -5,16 +5,14 @@ import com.example.springsecurity.dto.response.RegisterUserResponse;
 import io.cqrs.controller.CommandController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "API auth", description = "Auth management")
+@CrossOrigin(value = "http://localhost:4200", allowCredentials = "true")
 public class SignupCommandCtrl extends CommandController<RegisterUserResponse, RegisterUserRequest> {
     @Override
     @PostMapping("/sing-up")

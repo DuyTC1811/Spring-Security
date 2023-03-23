@@ -18,21 +18,14 @@ import java.util.Set;
 public class RegisterUserRequest implements ICommand<RegisterUserResponse> {
     private String uuid;
     @NotBlank
-    @Size(min = 3, max = 20)
-    private String name;
-    private String cccd;
-    @NotBlank
     @Size(max = 50)
     @Email(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$")
     private String email;
     private String mobile;
     private String username;
-    private String lastName;
-    @NotBlank
-    @Size(min = 6, max = 40)
+    @NotBlank @Size(min = 6, max = 40)
     private String password;
     private Set<String> rolesId;
-    private String fistNamle;
     private String permissionId;
     private Timestamp registeredAt;
 }

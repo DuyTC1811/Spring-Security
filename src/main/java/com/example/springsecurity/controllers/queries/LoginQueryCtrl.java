@@ -5,10 +5,7 @@ import com.example.springsecurity.dto.response.LoginResponse;
 import io.cqrs.controller.QueryController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -16,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginQueryCtrl extends QueryController<LoginResponse, LoginRequest> {
 
     @Override
-    @GetMapping("/login")
+    @PostMapping("/sign-in")
     protected ResponseEntity<LoginResponse> coordinator(@RequestBody LoginRequest loginRequest) {
         return execute(loginRequest);
     }

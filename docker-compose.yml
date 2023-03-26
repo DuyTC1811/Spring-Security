@@ -13,18 +13,6 @@ services:
     ports:
       - '5432:5432'
 
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    restart: unless-stopped
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: duytc
-    ports:
-      - 27017:27017
-    volumes:
-      - /Users/monkey/Documents/Docker-compose/docker-data/mongo:/data/db
-
   redpanda:
     # NOTE: Please use the latest version here!
     image: docker.redpanda.com/vectorized/redpanda:v21.11.15
@@ -45,8 +33,8 @@ services:
       - --advertise-pandaproxy-addr
       - PLAINTEXT://redpanda:28082,OUTSIDE://localhost:8082
     ports:
-      - 8081:8081
-      - 8082:8082
-      - 9092:9092
-      - 28082:28082
-      - 29092:29092
+      - '8081:8081'
+      - '8082:8082'
+      - '9092:9092'
+      - '28082:28082'
+      - '29092:29092'

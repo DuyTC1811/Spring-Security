@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -17,7 +18,7 @@ public class UserInfo {
     private String username;
     private String lastName;
     private String password;
-    private Set<String> roles;
+    private Set<Role> roles = new HashSet<>();
     private String firstName;
     private Timestamp registeredAt;
 }

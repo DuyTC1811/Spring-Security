@@ -2,7 +2,6 @@ package com.example.springsecurity.configuration.security;
 
 import com.example.springsecurity.models.UserInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;

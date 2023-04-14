@@ -1,11 +1,13 @@
 package com.example.springsecurity.models;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 public class UserInfo {
     private String userId;
     private String name;

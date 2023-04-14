@@ -1,7 +1,10 @@
 package com.example.springsecurity.configuration.jwt;
 
 import com.example.springsecurity.configuration.security.UserDetailsImpl;
+import com.example.springsecurity.models.UserInfo;
+import io.exceptions.models.TokenRefreshException;
 import io.jsonwebtoken.*;
+import io.utilities.cache.IRedisValueOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,20 +12,26 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static io.utilities.converter.ConverterStringUntil.converterStringToObject;
 
 @Component
 public class JwtUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
+
+    private final IRedisValueOperation<String> redisValueOperation;
     @Value("${spring.security.jwtSecret}")
     private String jwtSecret;
 
     @Value("${spring.security.jwtExpirationMs}")
     private int jwtExpirationMs;
+
+
+    public JwtUtils(IRedisValueOperation<String> redisValueOperation) {
+        this.redisValueOperation = redisValueOperation;
+    }
 
     /**
      * Được dùng để tạo ra mã Token và thêm các thông tin mà ta muốn thêm vào token
@@ -55,6 +64,38 @@ public class JwtUtils {
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
+
+    public String generateTokenFromUsername(String username) {
+        Date currentDate = new Date();
+        UserInfo userInfo = verifyExpiration(username);
+        // Thêm những thông tin vào trong token
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", userInfo.getUsername());
+        claims.put("userCode", userInfo.getUserCode());
+        claims.put("roles", userInfo.getRoles());
+
+        return Jwts.builder()
+                .setSubject(username)
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(currentDate.getTime() + jwtExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
+
+    /**
+     * Kiểm tra thời hạn của User
+     * @param username username
+     * @return UserInfo
+     */
+    public UserInfo verifyExpiration(String username) {
+        String value = redisValueOperation.getValue(username);
+        if (Objects.isNull(value)) {
+            throw new TokenRefreshException(username, "This user has expired. Please make a new sign-in request");
+        }
+        return converterStringToObject(value, UserInfo.class);
+    }
+
 
     /**
      * Phương thức này dùng để check Token

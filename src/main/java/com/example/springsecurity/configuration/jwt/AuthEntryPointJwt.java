@@ -36,7 +36,6 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
             mapper.writeValue(response.getOutputStream(), body);
         } catch (IOException exception) {
             LOGGER.error("Convert Error {}", exception.getMessage());
-            throw new RuntimeException(exception);
         }
     }
 }

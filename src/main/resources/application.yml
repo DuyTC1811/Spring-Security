@@ -10,7 +10,16 @@ mybatis:
 spring:
   security:
     jwtSecret: DUY-TC
-    jwtExpirationMs: 86400000
+    jwtExpirationMs: 60000
+    jwtRefreshExpirationMs: 120000
+
+  redis:
+    host: localhost
+    port: 6379
+    password: duytc
+    connect-timeout: 60000
+    database: 0
+
   datasource:
     hikari:
       auto-commit: true

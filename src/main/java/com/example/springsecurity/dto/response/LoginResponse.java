@@ -11,4 +11,5 @@ public class LoginResponse {
     public LoginResponse(String token) {
         this.token = "Bearer " + token;
     }
+
 }

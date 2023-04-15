@@ -10,4 +10,5 @@ public interface IQueryRoleMapper {
     String findByRoleName(String request);
     @MapKey("slug")
     Map<String,String> listRole();
+
 }

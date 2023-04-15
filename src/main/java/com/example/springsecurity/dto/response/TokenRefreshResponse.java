@@ -11,4 +11,5 @@ public class TokenRefreshResponse {
     public TokenRefreshResponse(String refreshToken) {
         this.refreshToken = "Bearer " + refreshToken;
     }
+
 }

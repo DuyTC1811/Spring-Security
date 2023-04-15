@@ -9,4 +9,5 @@ import javax.validation.constraints.NotBlank;
 public class LoginRequest implements IQuery<LoginResponse> {
     @NotBlank private String username;
     @NotBlank private String password;
+
 }

@@ -15,8 +15,7 @@
                PASSWORD,
                REGISTERED_AT
         FROM "user"
-        WHERE USERNAME = #{username}
-          AND ACTIVE = 'ACTIVE';
+        WHERE USERNAME = #{username} AND ACTIVE = 'ACTIVE';
     </select>
 
     <select id="findByUserRoles" resultType="java.lang.String">

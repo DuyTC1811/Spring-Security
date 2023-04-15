@@ -20,4 +20,5 @@ public class UserInfo {
     private Set<String> roles;
     private String firstName;
     private Timestamp registeredAt;
+
 }

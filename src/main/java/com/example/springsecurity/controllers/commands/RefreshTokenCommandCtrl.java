@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "API auth", description = "Auth management")
 @CrossOrigin(value = "http://localhost:4200", allowCredentials = "true")
 public class RefreshTokenCommandCtrl extends CommandController<TokenRefreshResponse, TokenRefreshRequest> {
+
     @Override
     @PostMapping("/refresh-token")
     protected ResponseEntity<TokenRefreshResponse> coordinator(@RequestBody TokenRefreshRequest request) {

@@ -14,6 +14,7 @@ import javax.validation.Valid;
 @Tag(name = "API auth", description = "Auth management")
 @CrossOrigin(value = "http://localhost:4200", allowCredentials = "true")
 public class SignupCommandCtrl extends CommandController<RegisterUserResponse, RegisterUserRequest> {
+
     @Override
     @PostMapping("/sing-up")
     protected ResponseEntity<RegisterUserResponse> coordinator(@Valid @RequestBody RegisterUserRequest request) {

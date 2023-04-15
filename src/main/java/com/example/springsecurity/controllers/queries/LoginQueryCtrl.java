@@ -18,4 +18,5 @@ public class LoginQueryCtrl extends QueryController<LoginResponse, LoginRequest>
     protected ResponseEntity<LoginResponse> coordinator(@RequestBody LoginRequest loginRequest) {
         return execute(loginRequest);
     }
+
 }

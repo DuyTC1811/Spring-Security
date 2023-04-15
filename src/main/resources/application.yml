@@ -46,7 +46,3 @@ spring:
 grpc:
   port: 9000
 
-logging:
-  level:
-    com.example.springmybatis.mapper.*: TRACE
-

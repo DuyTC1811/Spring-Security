@@ -38,4 +38,5 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
             LOGGER.error("Convert Error {}", exception.getMessage());
         }
     }
+
 }

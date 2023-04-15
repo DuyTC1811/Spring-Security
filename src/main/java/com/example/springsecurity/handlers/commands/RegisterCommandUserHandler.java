@@ -73,4 +73,5 @@ public class RegisterCommandUserHandler implements ICommandHandler<RegisterUserR
         commandUserMapper.registerUser(request);
         return new RegisterUserResponse("User registered successfully! id = " + request.getUuid());
     }
+
 }

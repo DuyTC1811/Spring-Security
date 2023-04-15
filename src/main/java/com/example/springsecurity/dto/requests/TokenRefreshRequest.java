@@ -9,4 +9,5 @@ import lombok.Setter;
 @Setter
 public class TokenRefreshRequest implements ICommand<TokenRefreshResponse> {
     private String username;
+
 }

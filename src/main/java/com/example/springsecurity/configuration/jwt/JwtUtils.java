@@ -2,14 +2,17 @@ package com.example.springsecurity.configuration.jwt;
 
 import com.example.springsecurity.configuration.security.UserDetailsImpl;
 import com.example.springsecurity.models.UserInfo;
-import io.exceptions.models.TokenRefreshException;
+import io.exceptions.models.TokenException;
 import io.jsonwebtoken.*;
 import io.utilities.cache.IRedisValueOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -20,8 +23,8 @@ import static io.utilities.converter.ConverterStringUntil.converterStringToObjec
 @Component
 public class JwtUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
-
     private final IRedisValueOperation<String> redisValueOperation;
+    private final AuthenticationManager authenticationManager;
     @Value("${spring.security.jwtSecret}")
     private String jwtSecret;
 
@@ -29,24 +32,31 @@ public class JwtUtils {
     private int jwtExpirationMs;
 
 
-    public JwtUtils(IRedisValueOperation<String> redisValueOperation) {
+    public JwtUtils(
+            IRedisValueOperation<String> redisValueOperation,
+            AuthenticationManager authenticationManager) {
         this.redisValueOperation = redisValueOperation;
+        this.authenticationManager = authenticationManager;
     }
 
     /**
      * Được dùng để tạo ra mã Token và thêm các thông tin mà ta muốn thêm vào token
      * Bao gồm thời gian hiệu lực của Token và thuật toán generate Token
      *
-     * @param authentication Thôn tin xác thực
+     * @param username username
+     * @param password password
      * @return Chuỗi String Token
      */
-    public String generateJwtToken(Authentication authentication) {
+    public String generateJwtToken(String username, String password) {
         Date currentDate = new Date();
-
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+
         List<String> roles = userPrincipal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
+
         // Thêm những thông tin vào trong token
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", userPrincipal.getUsername());
@@ -62,7 +72,11 @@ public class JwtUtils {
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("username").toString();
     }
 
     public String generateTokenFromUsername(String username) {
@@ -85,13 +99,14 @@ public class JwtUtils {
 
     /**
      * Kiểm tra thời hạn của User
+     *
      * @param username username
      * @return UserInfo
      */
     public UserInfo verifyExpiration(String username) {
         String value = redisValueOperation.getValue(username);
         if (Objects.isNull(value)) {
-            throw new TokenRefreshException(username, "This user has expired. Please make a new sign-in request");
+            throw new TokenException(username, "This user has expired. Please make a new sign-in request");
         }
         return converterStringToObject(value, UserInfo.class);
     }

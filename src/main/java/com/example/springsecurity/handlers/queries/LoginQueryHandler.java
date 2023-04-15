@@ -6,22 +6,17 @@ import com.example.springsecurity.dto.response.LoginResponse;
 import io.cqrs.query.IQueryHandler;
 import io.exceptions.models.UserPasswordException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LoginQueryHandler implements IQueryHandler<LoginResponse, LoginRequest> {
     private final JwtUtils jwtUtils;
-    private final AuthenticationManager authenticationManager;
+
     @Value("${spring.security.jwtRefreshExpirationMs}")
     private Integer refreshTokenDurationMs;
 
-    public LoginQueryHandler(JwtUtils jwtUtils, AuthenticationManager authenticationManager) {
+    public LoginQueryHandler(JwtUtils jwtUtils) {
         this.jwtUtils = jwtUtils;
-        this.authenticationManager = authenticationManager;
     }
 
     @Override
@@ -31,10 +26,7 @@ public class LoginQueryHandler implements IQueryHandler<LoginResponse, LoginRequ
         if (username == null || password == null) {
             throw new UserPasswordException(username, password);
         }
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+        String jwt = jwtUtils.generateJwtToken(username, password);
         return new LoginResponse(jwt);
     }
 }

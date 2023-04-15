@@ -46,10 +46,12 @@ public class LoginQueryHandler implements IQueryHandler<LoginResponse, LoginRequ
         }
         String jwt = jwtUtils.generateJwtToken(username, password);
 
+//      lastLogin
         Map<String, Object> param = new HashMap<>();
         param.put("time", Timestamp.valueOf(LocalDateTime.now()));
         param.put("username", username);
         commandUserMapper.lastLogin(param);
+
         UserInfo userInfo = queryUserMapper.findByUsername(username);
         // Khi kiểm tra thông tin người dùng sau đó lưu thông tin người dùng vào cache
         redisValueOperation.pushCache(username, refreshTokenDurationMs, converterToString(userInfo));

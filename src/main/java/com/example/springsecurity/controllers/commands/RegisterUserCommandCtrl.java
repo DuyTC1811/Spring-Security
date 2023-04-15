@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/auth")
 @Tag(name = "API auth", description = "Auth management")
 @CrossOrigin(value = "http://localhost:4200", allowCredentials = "true")
-public class SignupCommandCtrl extends CommandController<RegisterUserResponse, RegisterUserRequest> {
+public class RegisterUserCommandCtrl extends CommandController<RegisterUserResponse, RegisterUserRequest> {
 
     @Override
     @PostMapping("/sing-up")

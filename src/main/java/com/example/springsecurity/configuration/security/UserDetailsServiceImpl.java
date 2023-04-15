@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         UserInfo userInfo = queryUserMapper.findByUsername(username);
         if (Objects.isNull(userInfo)) {
             throw new UsernameNotFoundException("User Not Found with username: " + username);

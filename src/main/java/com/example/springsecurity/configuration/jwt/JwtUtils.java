@@ -2,7 +2,7 @@ package com.example.springsecurity.configuration.jwt;
 
 import com.example.springsecurity.configuration.security.UserDetailsImpl;
 import com.example.springsecurity.models.UserInfo;
-import io.exceptions.models.TokenRefreshException;
+import io.exceptions.models.TokenException;
 import io.jsonwebtoken.*;
 import io.utilities.cache.IRedisValueOperation;
 import org.slf4j.Logger;
@@ -62,7 +62,11 @@ public class JwtUtils {
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("username").toString();
     }
 
     public String generateTokenFromUsername(String username) {
@@ -91,7 +95,7 @@ public class JwtUtils {
     public UserInfo verifyExpiration(String username) {
         String value = redisValueOperation.getValue(username);
         if (Objects.isNull(value)) {
-            throw new TokenRefreshException(username, "This user has expired. Please make a new sign-in request");
+            throw new TokenException(username, "This user has expired. Please make a new sign-in request");
         }
         return converterStringToObject(value, UserInfo.class);
     }

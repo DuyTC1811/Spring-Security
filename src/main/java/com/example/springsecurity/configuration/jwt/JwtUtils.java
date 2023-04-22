@@ -44,7 +44,8 @@ public class JwtUtils {
      * Được dùng để tạo ra mã Token và thêm các thông tin mà ta muốn thêm vào token
      * Bao gồm thời gian hiệu lực của Token và thuật toán generate Token
      *
-     * @param authentication Thôn tin xác thực
+     * @param username Thôn tin xác thực
+     * @param password Thôn tin xác thực
      * @return Chuỗi String Token
      */
     public String generateJwtToken(String username, String password) {

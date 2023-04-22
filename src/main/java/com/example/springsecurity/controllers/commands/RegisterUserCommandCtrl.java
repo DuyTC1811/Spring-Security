@@ -16,7 +16,7 @@ import javax.validation.Valid;
 public class RegisterUserCommandCtrl extends CommandController<RegisterUserResponse, RegisterUserRequest> {
 
     @Override
-    @PostMapping("/sing-up")
+    @PostMapping("/sign-up")
     protected ResponseEntity<RegisterUserResponse> coordinator(@Valid @RequestBody RegisterUserRequest request) {
         return execute(request);
     }

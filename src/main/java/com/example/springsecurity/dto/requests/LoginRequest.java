@@ -2,12 +2,17 @@ package com.example.springsecurity.dto.requests;
 
 import com.example.springsecurity.dto.response.LoginResponse;
 import io.cqrs.query.IQuery;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-@Data
+
+@Setter
+@Getter
 public class LoginRequest implements IQuery<LoginResponse> {
-    @NotBlank private String username;
-    @NotBlank private String password;
+    @NotBlank
+    private String username;
+    @NotBlank
+    private String password;
 
 }

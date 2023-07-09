@@ -4,6 +4,7 @@ import com.example.springsecurity.configuration.jwt.JwtUtils;
 import com.example.springsecurity.dto.requests.TokenRefreshRequest;
 import com.example.springsecurity.dto.response.TokenRefreshResponse;
 import io.cqrs.command.ICommandHandler;
+import io.cqrs.model.BaseResponse;
 import org.springframework.stereotype.Service;
 
 
@@ -16,8 +17,8 @@ public class RefreshTokenCommandHandler implements ICommandHandler<TokenRefreshR
     }
 
     @Override
-    public TokenRefreshResponse handler(TokenRefreshRequest request) {
+    public BaseResponse<TokenRefreshResponse> handler(TokenRefreshRequest request) {
         String newToken = jwtUtils.generateTokenFromUsername(request.getUsername());
-        return new TokenRefreshResponse(newToken);
+        return new BaseResponse<>(new TokenRefreshResponse(newToken));
     }
 }

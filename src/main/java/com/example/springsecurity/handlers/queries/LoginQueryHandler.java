@@ -6,6 +6,7 @@ import com.example.springsecurity.dto.response.LoginResponse;
 import com.example.springsecurity.mappers.commands.ICommandUserMapper;
 import com.example.springsecurity.mappers.queries.IQueryUserMapper;
 import com.example.springsecurity.models.UserInfo;
+import io.cqrs.model.BaseResponse;
 import io.cqrs.query.IQueryHandler;
 import io.exceptions.models.UserPasswordException;
 import io.utilities.cache.IRedisValueOperation;
@@ -38,7 +39,7 @@ public class LoginQueryHandler implements IQueryHandler<LoginResponse, LoginRequ
     }
 
     @Override
-    public LoginResponse handler(LoginRequest loginRequest) {
+    public BaseResponse<LoginResponse> handler(LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
         if (username == null || password == null) {
@@ -52,9 +53,6 @@ public class LoginQueryHandler implements IQueryHandler<LoginResponse, LoginRequ
         param.put("username", username);
         commandUserMapper.lastLogin(param);
 
-        UserInfo userInfo = queryUserMapper.findByUsername(username);
-        // Khi kiểm tra thông tin người dùng sau đó lưu thông tin người dùng vào cache
-        redisValueOperation.pushCache(username, refreshTokenDurationMs, converterToString(userInfo));
-        return new LoginResponse(jwt);
+        return new BaseResponse<>(new LoginResponse(jwt));
     }
 }

@@ -2,41 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.springsecurity.mappers.queries.IQueryUserMapper">
-    <select id="findByUsername" resultType="UserInfo">
-        SELECT USER_ID,
-               USERNAME,
-               USER_CODE,
-               FIRST_NAME,
-               LAST_NAME,
-               NAME,
-               MOBILE,
-               EMAIL,
-               CCCD,
-               PASSWORD,
-               REGISTERED_AT
-        FROM "user"
-        WHERE USERNAME = #{username} AND ACTIVE = 'ACTIVE';
-    </select>
 
-    <select id="findByUserRoles" resultType="java.lang.String">
-        SELECT R.SLUG
-        FROM "user" AS U
-                 INNER JOIN USER_ROLE AS USR ON U.USER_ID = USR.USER_ID
-                 INNER JOIN ROLE AS R ON R.ROLE_ID = USR.ROLE_ID
+    <resultMap id="userInfo" type="UserInfo">
+        <result property="userId" column="USER_ID"/>
+        <result property="username" column="USERNAME"/>
+        <result property="userCode" column="USER_CODE"/>
+        <result property="firstName" column="FIRST_NAME"/>
+        <result property="lastName" column="LAST_NAME"/>
+        <result property="mobile" column="MOBILE"/>
+        <result property="email" column="EMAIL"/>
+        <result property="password" column="PASSWORD"/>
+        <result property="roles" typeHandler="com.example.springsecurity.util.ArrayTypeHandler" column="ROLES"/>
+        <result property="registeredAt" column="REGISTERED_AT"/>
+    </resultMap>
+
+
+    <select id="findByUsername" resultType="userInfo">
+        SELECT U.USER_ID,
+               U.USERNAME,
+               U.USER_CODE,
+               U.FIRST_NAME,
+               U.LAST_NAME,
+               U.MOBILE,
+               U.EMAIL,
+               U.PASSWORD,
+               U.REGISTERED_AT,
+               ARRAY_AGG(R.SLUG) AS ROLES
+        FROM USERS AS U
+                 JOIN USER_ROLE AS USR ON U.USER_ID = USR.USER_ID
+                 JOIN ROLE AS R ON R.ROLE_ID = USR.ROLE_ID
         WHERE U.USERNAME = #{username}
           AND R.ACTIVE = 'ACTIVE'
-          AND U.ACTIVE = 'ACTIVE';
+          AND U.ACTIVE = 'ACTIVE'
+        GROUP BY U.USER_ID, U.USERNAME, U.USER_CODE, U.FIRST_NAME, U.LAST_NAME, U.MOBILE, U.EMAIL, U.PASSWORD, U.REGISTERED_AT;
     </select>
 
-    <select id="checkUserExists" resultType="boolean">
-        SELECT EXISTS(SELECT 1 FROM "user" WHERE USERNAME = #{username} AND ACTIVE = 'ACTIVE');
-    </select>
-
-    <select id="checkEmailExists" parameterType="string" resultType="boolean">
-        SELECT EXISTS(SELECT 1 FROM "user" WHERE EMAIL = #{email} AND ACTIVE = 'ACTIVE');
-    </select>
-
-    <select id="checkMobileExists" parameterType="string" resultType="boolean">
-        SELECT EXISTS(SELECT 1 FROM "user" WHERE MOBILE = #{moblie} AND ACTIVE = 'ACTIVE');
-    </select>
 </mapper>

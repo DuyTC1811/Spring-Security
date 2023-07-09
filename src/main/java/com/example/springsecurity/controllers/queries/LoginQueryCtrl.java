@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class LoginQueryCtrl extends QueryController<LoginResponse, LoginRequest> {
 
     @PostMapping("/sign-in")
-    protected ResponseEntity<BaseResponse<LoginResponse>> coordinator(@RequestBody LoginRequest loginRequest) {
+    protected ResponseEntity<BaseResponse<LoginResponse>> loginUser(@RequestBody LoginRequest loginRequest) {
         return execute(loginRequest);
     }
 

@@ -11,7 +11,6 @@ import java.util.Set;
 @Setter
 public class UserInfo {
     private String userId;
-    private String name;
     private String userCode;
     private String email;
     private String mobile;

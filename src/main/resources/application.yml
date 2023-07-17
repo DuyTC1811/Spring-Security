@@ -1,5 +1,5 @@
 server:
-  port: 8181
+  port: 0
 
 mybatis:
   configuration:
@@ -9,6 +9,9 @@ mybatis:
   mapper-locations: /mybatis/*/*.xml
 
 spring:
+  application:
+    name: security
+
   security:
     jwtSecret: DUY-TC
     jwtExpirationMs: 60000
@@ -17,7 +20,6 @@ spring:
   redis:
     host: 192.168.0.188
     port: 6379
-#    password: duytc
     connect-timeout: 60000
     database: 0
 

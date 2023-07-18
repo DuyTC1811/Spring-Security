@@ -1,5 +1,9 @@
 server:
   port: 0
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.0.188:8761/eureka/
 
 mybatis:
   configuration:

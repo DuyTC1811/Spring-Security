@@ -5,7 +5,6 @@ import com.example.springsecurity.dto.requests.LoginRequest;
 import com.example.springsecurity.dto.response.LoginResponse;
 import com.example.springsecurity.mappers.commands.ICommandUserMapper;
 import com.example.springsecurity.mappers.queries.IQueryUserMapper;
-import com.example.springsecurity.models.UserInfo;
 import io.cqrs.model.BaseResponse;
 import io.cqrs.query.IQueryHandler;
 import io.exceptions.models.UserPasswordException;
@@ -17,8 +16,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-
-import static io.utilities.converter.ConverterStringUntil.converterToString;
 
 @Service
 public class LoginQueryHandler implements IQueryHandler<LoginResponse, LoginRequest> {

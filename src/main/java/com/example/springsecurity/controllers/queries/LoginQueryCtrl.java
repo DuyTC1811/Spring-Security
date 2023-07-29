@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@Tag(name = "API auth", description = "Auth management")
-@CrossOrigin(value = "http://localhost:4200", allowCredentials = "true")
+//@Tag(name = "API auth", description = "Auth management")
+//@CrossOrigin(value = "http://localhost:4200", allowCredentials = "true")
 public class LoginQueryCtrl extends QueryController<LoginResponse, LoginRequest> {
 
     @PostMapping("/sign-in")

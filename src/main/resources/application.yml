@@ -14,42 +14,30 @@ mybatis:
 
 spring:
   application:
-    name: security
+    name: SECURITY
 
   security:
     jwtSecret: DUY-TC
     jwtExpirationMs: 60000
     jwtRefreshExpirationMs: 120000
 
-  redis:
-    host: 192.168.0.188
-    port: 6379
-    connect-timeout: 60000
-    database: 0
+#  redis:
+#    host: 192.168.0.188
+#    port: 6379
+#    connect-timeout: 60000
+#    database: 0
 
   datasource:
+    url: jdbc:postgresql://192.168.0.188:5432/postgres
+    username: duytc
+    password: duytc
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
     hikari:
       auto-commit: true
       idle-timeout: 20000
       maximum-pool-size: 2
       max-lifetime: 1800000
       connection-timeout: 20000
-      data-source-properties:
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
-        useLocalSessionState: true
-        rewriteBatchedStatements: true
-        cacheResultSetMetadata: true
-        cacheServerConfiguration: true
-        elideSetAutoCommits: true
-        maintainTimeStats: false
-      pool-name: Slave-DB
-    url: jdbc:postgresql://192.168.0.188:5432/postgres
-    username: duytc
-    password: duytc
-
-grpc:
-  port: 9000
+      pool-name: Pool ==>
 
